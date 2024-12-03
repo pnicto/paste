@@ -5,7 +5,6 @@ function App() {
   const [value, setValue] = useState("");
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const onChange = useCallback((val: string, _: ViewUpdate) => {
-    console.log("val:", val);
     setValue(val);
   }, []);
   return (
