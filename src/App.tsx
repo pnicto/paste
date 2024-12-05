@@ -73,6 +73,15 @@ function App() {
 
         <button
           onClick={() => {
+            navigator.clipboard.writeText(value).catch((err) => {
+              console.error(err);
+            });
+          }}
+        >
+          Copy Text
+        </button>
+        <button
+          onClick={() => {
             const url = generateUrl(value);
             navigator.clipboard.writeText(url).catch((err) => {
               console.error(err);
