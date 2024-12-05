@@ -50,9 +50,10 @@ function App() {
 
       <CodeMirror
         value={value}
-        height="200px"
+        height="auto"
         onChange={onChange}
         extensions={extensions}
+        autoFocus
       />
     </>
   );
