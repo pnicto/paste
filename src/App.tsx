@@ -10,7 +10,7 @@ import { useCallback, useEffect, useState } from "react";
 const PLAIN_TEXT = "plain text";
 
 const languageOptions = [...Object.keys(langs), PLAIN_TEXT].sort();
-
+const fontSizeOptions = [12, 14, 16, 18, 20, 24, 30];
 type Language = keyof typeof langs | typeof PLAIN_TEXT;
 
 function generateUrl(language: Language, code: string) {
@@ -39,6 +39,8 @@ function App() {
   const [editorText, setEditorText] = useState("");
   const [editorLanguage, setEditorLanguage] = useState<Language>(PLAIN_TEXT);
   const [extensions, setExtensions] = useState<Extension[]>([]);
+  const [editorFontSize, setEditorFontSize] = useState(18);
+
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const onChange = useCallback((val: string, _: ViewUpdate) => {
     setEditorText(val);
@@ -81,7 +83,16 @@ function App() {
             ))}
           </select>
         </label>
-
+        <select
+          value={editorFontSize}
+          onChange={(e) => setEditorFontSize(parseInt(e.target.value))}
+        >
+          {fontSizeOptions.map((size) => (
+            <option key={size} value={size}>
+              {size} px
+            </option>
+          ))}
+        </select>
         <button
           onClick={() => {
             navigator.clipboard.writeText(editorText).catch((err) => {
@@ -115,6 +126,7 @@ function App() {
 
       <CodeMirror
         value={editorText}
+        style={{ fontSize: `${editorFontSize}px` }}
         height="calc(100vh - 3em)"
         maxHeight="calc(100vh - 3em)"
         onChange={onChange}
