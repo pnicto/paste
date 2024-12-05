@@ -26,17 +26,17 @@ function parseUrl() {
 }
 
 function App() {
-  const [value, setValue] = useState("");
-  const [lang, setLang] = useState<Language>(PLAIN_TEXT);
+  const [editorText, setEditorText] = useState("");
+  const [editorLanguage, setEditorLanguage] = useState<Language>(PLAIN_TEXT);
   const [extensions, setExtensions] = useState<Extension[]>([]);
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const onChange = useCallback((val: string, _: ViewUpdate) => {
-    setValue(val);
+    setEditorText(val);
   }, []);
 
   const handleLangChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     const targetLang = e.target.value as Language;
-    setLang(targetLang);
+    setEditorLanguage(targetLang);
     if (targetLang !== PLAIN_TEXT) {
       setExtensions([langs[targetLang]()]);
     } else {
@@ -45,7 +45,7 @@ function App() {
   };
 
   useEffect(() => {
-    setValue(parseUrl());
+    setEditorText(parseUrl());
   }, []);
 
   return (
@@ -60,7 +60,7 @@ function App() {
         <label>
           Language:
           <select
-            value={lang}
+            value={editorLanguage}
             onChange={(e) => {
               handleLangChange(e);
             }}
@@ -73,7 +73,7 @@ function App() {
 
         <button
           onClick={() => {
-            navigator.clipboard.writeText(value).catch((err) => {
+            navigator.clipboard.writeText(editorText).catch((err) => {
               console.error(err);
             });
           }}
@@ -82,7 +82,7 @@ function App() {
         </button>
         <button
           onClick={() => {
-            const url = generateUrl(value);
+            const url = generateUrl(editorText);
             navigator.clipboard.writeText(url).catch((err) => {
               console.error(err);
             });
@@ -92,7 +92,7 @@ function App() {
         </button>
         <button
           onClick={() => {
-            const url = generateUrl(value);
+            const url = generateUrl(editorText);
             navigator.clipboard.writeText(`[paste](${url})`).catch((err) => {
               console.error(err);
             });
@@ -103,7 +103,7 @@ function App() {
       </nav>
 
       <CodeMirror
-        value={value}
+        value={editorText}
         height="calc(100vh - 3em)"
         maxHeight="calc(100vh - 3em)"
         onChange={onChange}
