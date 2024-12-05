@@ -18,12 +18,12 @@ function generateUrl(language: Language, code: string) {
     language + "@" + code
   );
   const url = window.location.origin;
-  return url + "/" + compressed;
+  return url + "/#" + compressed;
 }
 
 function parseUrl() {
   // this on root gives "/" but I only need the contents after that
-  const pathContents = window.location.pathname.slice(1);
+  const pathContents = window.location.hash.slice(1);
   const decompressed =
     LZString.decompressFromEncodedURIComponent(pathContents) ?? "";
 
