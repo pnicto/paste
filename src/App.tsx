@@ -1,12 +1,25 @@
 import { langs } from "@uiw/codemirror-extensions-langs";
 import CodeMirror, { Extension, ViewUpdate } from "@uiw/react-codemirror";
-import { useCallback, useState } from "react";
+import LZString from "lz-string";
+import { useCallback, useEffect, useState } from "react";
 
 const PLAIN_TEXT = "plain text";
 
 const languageOptions = [...Object.keys(langs), PLAIN_TEXT].sort();
 
 type Language = keyof typeof langs | typeof PLAIN_TEXT;
+
+function generateUrl(code: string) {
+  const compressed = LZString.compressToEncodedURIComponent(code);
+  const url = window.location.origin;
+  return url + "/" + compressed;
+}
+
+function parseUrl() {
+  // this on root gives "/" but I only need the contents after that
+  const pathContents = window.location.pathname.slice(1);
+  return LZString.decompressFromEncodedURIComponent(pathContents);
+}
 
 function App() {
   const [value, setValue] = useState("");
@@ -27,6 +40,10 @@ function App() {
     }
   };
 
+  useEffect(() => {
+    setValue(parseUrl());
+  }, []);
+
   return (
     <>
       <nav>
@@ -44,7 +61,7 @@ function App() {
           </select>
         </label>
 
-        <button>Copy link</button>
+        <button onClick={() => generateUrl(value)}>Copy link</button>
         <button>Copy markdown link</button>
       </nav>
 
