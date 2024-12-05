@@ -18,7 +18,7 @@ function generateUrl(code: string) {
 function parseUrl() {
   // this on root gives "/" but I only need the contents after that
   const pathContents = window.location.pathname.slice(1);
-  return LZString.decompressFromEncodedURIComponent(pathContents);
+  return LZString.decompressFromEncodedURIComponent(pathContents) ?? "";
 }
 
 function App() {
