@@ -67,7 +67,8 @@ function App() {
 
       <CodeMirror
         value={value}
-        height="auto"
+        height="calc(100vh - 3em)"
+        maxHeight="calc(100vh - 3em)"
         onChange={onChange}
         extensions={extensions}
         autoFocus
