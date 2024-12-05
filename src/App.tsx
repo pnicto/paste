@@ -29,19 +29,25 @@ function App() {
 
   return (
     <>
-      <label>
-        Language:
-        <select
-          value={lang}
-          onChange={(e) => {
-            handleLangChange(e);
-          }}
-        >
-          {languageOptions.map((language) => (
-            <option key={language}>{language}</option>
-          ))}
-        </select>
-      </label>
+      <nav>
+        <label>
+          Language:
+          <select
+            value={lang}
+            onChange={(e) => {
+              handleLangChange(e);
+            }}
+          >
+            {languageOptions.map((language) => (
+              <option key={language}>{language}</option>
+            ))}
+          </select>
+        </label>
+
+        <button>Copy link</button>
+        <button>Copy markdown link</button>
+      </nav>
+
       <CodeMirror
         value={value}
         height="200px"
