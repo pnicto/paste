@@ -46,7 +46,13 @@ function App() {
 
   return (
     <>
-      <nav>
+      <nav
+        style={{
+          display: "flex",
+          justifyContent: "end",
+          gap: "1rem",
+        }}
+      >
         <label>
           Language:
           <select
