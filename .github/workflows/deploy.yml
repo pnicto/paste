@@ -34,4 +34,4 @@ jobs:
         run: pnpm install -g surge
 
       - name: Deploy to surge
-        run: surge ./dist pste.surge.sh --token ${{secrets.SURGE_TOKEN}} > /dev/null
+        run: surge ./dist qpaste.surge.sh --token ${{secrets.SURGE_TOKEN}} > /dev/null
