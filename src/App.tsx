@@ -67,8 +67,26 @@ function App() {
           </select>
         </label>
 
-        <button onClick={() => generateUrl(value)}>Copy link</button>
-        <button>Copy markdown link</button>
+        <button
+          onClick={() => {
+            const url = generateUrl(value);
+            navigator.clipboard.writeText(url).catch((err) => {
+              console.error(err);
+            });
+          }}
+        >
+          Copy link
+        </button>
+        <button
+          onClick={() => {
+            const url = generateUrl(value);
+            navigator.clipboard.writeText(`[paste](${url})`).catch((err) => {
+              console.error(err);
+            });
+          }}
+        >
+          Copy markdown link
+        </button>
       </nav>
 
       <CodeMirror
