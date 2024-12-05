@@ -1,5 +1,9 @@
 import { langs } from "@uiw/codemirror-extensions-langs";
-import CodeMirror, { Extension, ViewUpdate } from "@uiw/react-codemirror";
+import CodeMirror, {
+  EditorView,
+  Extension,
+  ViewUpdate,
+} from "@uiw/react-codemirror";
 import LZString from "lz-string";
 import { useCallback, useEffect, useState } from "react";
 
@@ -94,7 +98,7 @@ function App() {
         height="calc(100vh - 3em)"
         maxHeight="calc(100vh - 3em)"
         onChange={onChange}
-        extensions={extensions}
+        extensions={[...extensions, EditorView.lineWrapping]}
         autoFocus
       />
     </>
