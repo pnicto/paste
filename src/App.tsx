@@ -13,8 +13,10 @@ const languageOptions = [...Object.keys(langs), PLAIN_TEXT].sort();
 
 type Language = keyof typeof langs | typeof PLAIN_TEXT;
 
-function generateUrl(code: string) {
-  const compressed = LZString.compressToEncodedURIComponent(code);
+function generateUrl(language: Language, code: string) {
+  const compressed = LZString.compressToEncodedURIComponent(
+    language + "@" + code
+  );
   const url = window.location.origin;
   return url + "/" + compressed;
 }
@@ -22,7 +24,15 @@ function generateUrl(code: string) {
 function parseUrl() {
   // this on root gives "/" but I only need the contents after that
   const pathContents = window.location.pathname.slice(1);
-  return LZString.decompressFromEncodedURIComponent(pathContents) ?? "";
+  const decompressed =
+    LZString.decompressFromEncodedURIComponent(pathContents) ?? "";
+
+  const [language, ...codeParts] = decompressed.split("@");
+  const code = codeParts.join("@");
+
+  if (!languageOptions.includes(language))
+    return { language: PLAIN_TEXT as Language, code };
+  return { language: language as Language, code };
 }
 
 function App() {
@@ -34,8 +44,7 @@ function App() {
     setEditorText(val);
   }, []);
 
-  const handleLangChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    const targetLang = e.target.value as Language;
+  const handleLangChange = (targetLang: Language) => {
     setEditorLanguage(targetLang);
     if (targetLang !== PLAIN_TEXT) {
       setExtensions([langs[targetLang]()]);
@@ -45,7 +54,9 @@ function App() {
   };
 
   useEffect(() => {
-    setEditorText(parseUrl());
+    const { language, code } = parseUrl();
+    handleLangChange(language);
+    setEditorText(code);
   }, []);
 
   return (
@@ -62,7 +73,7 @@ function App() {
           <select
             value={editorLanguage}
             onChange={(e) => {
-              handleLangChange(e);
+              handleLangChange(e.target.value as Language);
             }}
           >
             {languageOptions.map((language) => (
@@ -82,7 +93,7 @@ function App() {
         </button>
         <button
           onClick={() => {
-            const url = generateUrl(editorText);
+            const url = generateUrl(editorLanguage, editorText);
             navigator.clipboard.writeText(url).catch((err) => {
               console.error(err);
             });
@@ -92,7 +103,7 @@ function App() {
         </button>
         <button
           onClick={() => {
-            const url = generateUrl(editorText);
+            const url = generateUrl(editorLanguage, editorText);
             navigator.clipboard.writeText(`[paste](${url})`).catch((err) => {
               console.error(err);
             });
